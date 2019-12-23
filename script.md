@@ -180,3 +180,37 @@ lambda add-permission --function-name upload-helloworld --action "lambda:InvokeF
     "Statement": "{\"Sid\":\"2\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"apigateway.amazonaws.com\"},\"Action\":\"lambda:InvokeFunction\",\"Resource\":\"arn:aws:lambda:us-east-2:359684827196:function:upload-helloworld\",\"Condition\":{\"ArnLike\":{\"AWS:SourceArn\":\"arn:aws:execute-api:us-east-2:359684827196:z2fjwjvl73/*/POST/cli-test\"}}}"
 }
 ```
+
+### Create table
+```
+dynamodb create-table --table-name cli-helloworld --attribute-definitions AttributeName=ID,AttributeType=S --key-schema AttributeName=ID,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
+{
+    "TableDescription": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "ID",
+                "AttributeType": "S"
+            }
+        ],
+        "TableName": "cli-helloworld",
+        "KeySchema": [
+            {
+                "AttributeName": "ID",
+                "KeyType": "HASH"
+            }
+        ],
+        "TableStatus": "CREATING",
+        "CreationDateTime": 1577142257.938,
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 5,
+            "WriteCapacityUnits": 5
+        },
+        "TableSizeBytes": 0,
+        "ItemCount": 0,
+        "TableArn": "arn:aws:dynamodb:us-east-2:359684827196:table/cli-helloworld",
+        "TableId": "47e21b23-170f-4698-99f2-da1fcc3e587a"
+    }
+}
+```
