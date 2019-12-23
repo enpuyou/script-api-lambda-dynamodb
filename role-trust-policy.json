@@ -1,0 +1,22 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Action": [
+                "sts:AssumeRole"
+               "logs:CreateLogGroup",
+               "logs:CreateLogStream",
+               "logs:DescribeLogGroups",
+               "logs:DescribeLogStreams",
+               "logs:PutLogEvents",
+               "logs:GetLogEvents",
+               "logs:FilterLogEvents"
+           ],
+    "Resource": "*"
+    }
+  ]
+}
