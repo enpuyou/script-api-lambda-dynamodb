@@ -28,10 +28,10 @@ def convert_empty_values(raw):
 
 def lambda_post_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('uploadtest')
+    table = dynamodb.Table('upload-table-sh')
     data = json.loads(event['body'])
     data = convert_empty_values(data)
-    data['uploadtestId'] = str(uuid.uuid4());
+    data['ID'] = str(uuid.uuid4());
 
     response = table.put_item(
         Item = data
@@ -61,13 +61,13 @@ class CustomJsonEncoder(json.JSONEncoder):
 
 def lambda_get_handler(event, context):
     dynamodb = boto3.resource("dynamodb", region_name='us-east-2', endpoint_url="https://dynamodb.us-east-2.amazonaws.com")
-    table = dynamodb.Table('uploadtest')
+    table = dynamodb.Table('upload-table-sh')
     assignment = "java-assignment-solution-100-01"
 
     try:
         response = table.get_item(
             Key={
-                'uploadtestId': "fed94b4a-5be3-435b-8034-4b85466fe7c9",
+                'ID': "fed94b4a-5be3-435b-8034-4b85466fe7c9",
 
             }
         )
