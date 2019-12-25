@@ -7,20 +7,20 @@ After successfully making the account, go to
 ```
 My Security Credentials > Access keys > Create New Access Key
 ```
-This will generate and download a csv file containing the
-`Access Key ID` and `Secret Access Key`, which will be later put
-in AWS configure.
+This will generate and download a `csv` file containing the
+`Access Key ID` and `Secret Access Key`, which later will be put
+in the AWS-CLI configure
 
 ![AWS Secret Credential Page](aws_credential_page.png)
 
-#### Install AWS
+#### Install AWS-CLI
 ```
 pip install awscli
 ```
 
-#### Configure AWS
+#### Configure AWS-CLI
 
-Type in the following command to fill in four configurations.
+Type in the following command to fill in four configurations
 ```
 aws configure
 ```
@@ -44,14 +44,16 @@ usage of `Lambda`, `DynamoDB`, `APIGateway`, and `CloudWatchLogs`
 - Create an API Key for the HTTP Request
 - Create an DynamoDB table with an automated generated
 primary key named `ID`
-- Create a Lambda function to handle invocation from
-APIGateway and to store data into the previous DynamoDB table
-- Test invoke the API to get the status code
+- Create a `Lambda` function to handle invocation from
+`APIGateway` and to store data into the previous `DynamoDB` table
+- Test invoke the API to get a status code
 
 The names of IAM role, Lambda function, DynamoDB table, API...can
 be configured at the top of the `script.sh` file
 
 `upload_DB.py` contains the code that will be in the Lambda function.
 
-`role-trust-policy.json` contains the json template for the role
-trust policy that allows the use of Lambda.
+`role-trust-policy.json` contains the JSON template of the role
+trust policy that allows the use of Lambda
+
+`script.md` shows each command and its expected output
