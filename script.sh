@@ -41,6 +41,7 @@ aws iam attach-role-policy \
         --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole \
         --role-name ${role_name}
 
+# Pause for the time takes aws to create role
 sleep 10s
 
 # Create Lambda Function
