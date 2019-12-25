@@ -17,6 +17,8 @@ api_name="api-upload-sh"
 table_name="upload-table-sh"
 # Name for part of the API path
 api_path="cli-test-sh"
+# Name for the api key
+api_key_name="upload-API-key"
 # Get Amazon account information
 account=$(aws sts get-caller-identity --query "Account" --output=text)
 
@@ -111,7 +113,7 @@ aws apigateway create-deployment \
       --stage-name DEV
 
 # Create API Key
-aws apigateway create-api-key --name upload-API-key --enabled
+aws apigateway create-api-key --name ${api_key_name} --enabled
 
 # Add permission to lambda function to invoked by POST method
 aws lambda add-permission \
