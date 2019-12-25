@@ -1,12 +1,23 @@
 #!/bin/zsh
+
+# Settings
+# Role Name for IAM Role
 role_name="upload-cli-sh"
+# Lambda function name
 function_name="upload-test-sh"
+# Language for Lambda Function
 runtime="python3.7"
+# Path to lambda function zip file
 lambda_file_path="fileb://upload_DB.py.zip"
+# Lambda function handler (handler module in the file)
 lambda_function_handler="upload_DB.lambda_handler"
+# API Gateway Api name
 api_name="api-upload-sh"
+# DynamoDB Table name
 table_name="upload-table-sh"
-path_part="cli-test-sh"
+# Name for part of the API path
+api_path="cli-test-sh"
+# Get Amazon account information
 account=$(aws sts get-caller-identity --query "Account" --output=text)
 
 # Create Role
@@ -56,7 +67,7 @@ parent_id=$(aws apigateway get-resources \
 resource_id=$(aws apigateway create-resource \
         --rest-api-id ${rest_api_id} \
         --parent-id ${parent_id} \
-        --path-part ${path_part} \
+        --path-part ${api_path} \
         --query "id" \
         --output=text)
 
@@ -107,7 +118,7 @@ aws lambda add-permission \
       --action "lambda:InvokeFunction" \
       --statement-id 1 \
       --principal apigateway.amazonaws.com \
-      --source-arn "arn:aws:execute-api:us-east-2:${account}:${rest_api_id}/*/POST/${path_part}"
+      --source-arn "arn:aws:execute-api:us-east-2:${account}:${rest_api_id}/*/POST/${api_path}"
 
 # Add permission to lambda function to invoked by GET method
 aws lambda add-permission \
@@ -115,7 +126,7 @@ aws lambda add-permission \
       --action "lambda:InvokeFunction" \
       --statement-id 2 \
       --principal apigateway.amazonaws.com \
-      --source-arn "arn:aws:execute-api:us-east-2:${account}:${rest_api_id}/*/GET/${path_part}"
+      --source-arn "arn:aws:execute-api:us-east-2:${account}:${rest_api_id}/*/GET/${api_path}"
 
 # Create table
 aws dynamodb create-table \
@@ -124,6 +135,7 @@ aws dynamodb create-table \
       --key-schema AttributeName=ID,KeyType=HASH \
       --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 
+# Test Invoke to get status code 200
 aws apigateway test-invoke-method --rest-api-id ${rest_api_id} \
-  --resource-id ${resource_id} --http-method POST --path-with-query-string "" \
-  --body "{\"item\":\"test\"}" --query "status"
+      --resource-id ${resource_id} --http-method POST --path-with-query-string "" \
+      --body "{\"item\":\"test\"}" --query "status"
