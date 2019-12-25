@@ -1,13 +1,13 @@
-import json
-import os
-import boto3
-import datetime
-import uuid
+"""Lambda function to handle POST and GET"""
 import json
 from decimal import Decimal
+import uuid
+import boto3
+# import datetime
 
 
 def lambda_handler(event, context):
+    """Handles incoming request"""
     if event['httpMethod'] == "POST":
         return lambda_post_handler(event, context)
     elif event['httpMethod'] == "GET":
@@ -15,6 +15,7 @@ def lambda_handler(event, context):
 
 
 def convert_empty_values(raw):
+    """Convert empty values to Null for Nosql"""
     if isinstance(raw, dict):
         for k, v in raw.items():
             raw[k] = convert_empty_values(v)
@@ -26,15 +27,17 @@ def convert_empty_values(raw):
 
     return raw
 
+
 def lambda_post_handler(event, context):
+    """Sent data from API Gateway to the table"""
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('upload-table-sh')
     data = json.loads(event['body'])
     data = convert_empty_values(data)
-    data['ID'] = str(uuid.uuid4());
+    data['ID'] = str(uuid.uuid4())
 
     response = table.put_item(
-        Item = data
+        Item=data
     )
 
     # print("PutItem not succeeded :")
@@ -53,13 +56,16 @@ def lambda_post_handler(event, context):
 
 
 class CustomJsonEncoder(json.JSONEncoder):
-
+    """JSONEncoder for get item"""
     def default(self, obj):
+        """Convert Decimal to float"""
         if isinstance(obj, Decimal):
             return float(obj)
         return super(CustomJsonEncoder, self).default(obj)
 
+
 def lambda_get_handler(event, context):
+    """GET handler WIP"""
     dynamodb = boto3.resource("dynamodb", region_name='us-east-2', endpoint_url="https://dynamodb.us-east-2.amazonaws.com")
     table = dynamodb.Table('upload-table-sh')
     assignment = "java-assignment-solution-100-01"
