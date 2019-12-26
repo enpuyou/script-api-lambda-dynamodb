@@ -1,0 +1,9 @@
+language: generic
+
+
+install:
+  - gem install mdl
+
+script:
+  - mdl README.md
+  - shellcheck pr_tag_release.sh
