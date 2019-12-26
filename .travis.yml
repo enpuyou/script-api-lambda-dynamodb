@@ -6,4 +6,4 @@ install:
 
 script:
   - mdl README.md
-  - shellcheck pr_tag_release.sh
+  - shellcheck script.sh
