@@ -1,6 +1,7 @@
 # script-api-lambda-dynamodb
 
 [![Build Status](https://travis-ci.com/enpuyou/script-api-lambda-dynamodb.svg?branch=master)](https://travis-ci.com/enpuyou/script-api-lambda-dynamodb)
+
 A script for automating deployment of api-lambda-dynamodb
 
 ## Instruction
