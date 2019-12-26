@@ -109,7 +109,7 @@ aws apigateway put-integration \
       --uri arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:${account}:function:${function_name}/invocations
 
 
-# Deploy to stage DEV
+# Deploy to stage
 aws apigateway create-deployment \
       --rest-api-id ${rest_api_id} \
       --stage-name ${stage_name}
