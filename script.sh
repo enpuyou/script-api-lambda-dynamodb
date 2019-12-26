@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 # Settings
 # Role Name for IAM Role
@@ -23,6 +23,7 @@ api_key_name="upload-API-key"
 stage_name="DEV"
 # Get Amazon account information
 account=$(aws sts get-caller-identity --query "Account" --output=text)
+
 
 # Create Role
 role_arn=$(aws iam create-role \
@@ -115,14 +116,14 @@ aws apigateway create-deployment \
       --stage-name ${stage_name}
 
 # Create API Key
-GATOR_API_KEY=$(aws apigateway create-api-key \
+API_KEY=$(aws apigateway create-api-key \
       --name ${api_key_name} \
       --enabled \
       --query "value" \
       --output=text)
 
 # export GATOR_API_KEY and GATOR_ENDPOINT
-export $GATOR_API_KEY
+export GATOR_API_KEY=$API_KEY
 export GATOR_ENDPOINT=https://${rest_api_id}.execute-api.us-east-2.amazonaws.com/${stage_name}/${api_path}
 
 # Add permission to lambda function to invoked by POST method
