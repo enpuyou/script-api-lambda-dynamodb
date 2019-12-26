@@ -34,8 +34,9 @@ Default output format [json]:
 
 #### Run Script
 
+To run script within the existing shell, type in:
 ```
-./script.sh
+source ./script.sh
 ```
 This will
 - Create an `IAM Role` with policies which allow the
