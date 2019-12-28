@@ -34,7 +34,7 @@ def post_handler(event, context):
     """Sent data from API Gateway to the table"""
     data = json.loads(event["body"])
     data = convert_empty_values(data)
-    data["ID"] = str(uuid.uuid4())
+    # data["ID"] = str(uuid.uuid4())
 
     response = table.put_item(Item=data)
     return response["ResponseMetadata"]
@@ -42,7 +42,7 @@ def post_handler(event, context):
 
 def get_handler(event, context):
     # assignment = "java-assignment-solution-100-01"
-    for k,v in event["queryStringParameters"].items():
+    for k, v in event["queryStringParameters"].items():
         key = k
         value = v
     response = table.query(
