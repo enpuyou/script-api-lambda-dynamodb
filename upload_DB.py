@@ -3,17 +3,18 @@ import json
 from decimal import Decimal
 import uuid
 import boto3
+
 # import datetime
 
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('upload-table-sh')
+dynamodb = boto3.resource("dynamodb")
+table = dynamodb.Table("upload-table-sh")
 
 
 def lambda_handler(event, context):
     """Handles incoming request"""
-    if event['httpMethod'] == "POST":
+    if event["httpMethod"] == "POST":
         return lambda_post_handler(event, context)
-    elif event['httpMethod'] == "GET":
+    elif event["httpMethod"] == "GET":
         return lambda_get_handler(event, context)
 
 
@@ -33,33 +34,17 @@ def convert_empty_values(raw):
 
 def lambda_post_handler(event, context):
     """Sent data from API Gateway to the table"""
-    dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('upload-table-sh')
-    data = json.loads(event['body'])
+    data = json.loads(event["body"])
     data = convert_empty_values(data)
-    data['ID'] = str(uuid.uuid4())
+    data["ID"] = str(uuid.uuid4())
 
-    response = table.put_item(
-        Item=data
-    )
-
-    # print("PutItem not succeeded :")
-    # else:
-    #     print("PutItem succeeded: ")
-    print(json.dumps(response, indent=4))
-    response_body = response['ResponseMetadata']
-    format_response = {
-        "isBase64Encoded": False,
-        "statusCode": response_body['HTTPStatusCode'],
-        "headers": response_body['HTTPHeaders'],
-        "body": event['body']
-    }
-
-    return format_response
+    response = table.put_item(Item=data)
+    return response["ResponseMetadata"]
 
 
 class CustomJsonEncoder(json.JSONEncoder):
     """JSONEncoder for get item"""
+
     def default(self, obj):
         """Convert Decimal to float"""
         if isinstance(obj, Decimal):
@@ -69,11 +54,7 @@ class CustomJsonEncoder(json.JSONEncoder):
 
 def lambda_get_handler(event, context):
     assignment = "java-assignment-solution-100-01"
-    response = table.get_item(
-        Key={
-            'ID': "4dbc7496-669d-4e2b-9572-f2a5b68d914c",
-        }
-    )
+    response = table.get_item(Key={"ID": "4dbc7496-669d-4e2b-9572-f2a5b68d914c",})
     # Add item fetched to the return statement
-    response['ResponseMetadata']['Item'] = response['Item']
-    return response['ResponseMetadata']
+    response["ResponseMetadata"]["Item"] = response["Item"]
+    return response["ResponseMetadata"]
