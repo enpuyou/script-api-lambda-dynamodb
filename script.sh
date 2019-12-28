@@ -176,7 +176,7 @@ aws dynamodb create-table \
       --key-schema AttributeName=assignment,KeyType=HASH \
       --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 
-sleep 3s
+sleep 5s
 
 # Test Invoke to get status code 200
 aws apigateway test-invoke-method --rest-api-id ${rest_api_id} \
