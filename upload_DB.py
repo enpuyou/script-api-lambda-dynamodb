@@ -13,12 +13,13 @@ table = dynamodb.Table("upload-table-sh")
 def lambda_handler(event, context):
     """Handles incoming request"""
     if event["httpMethod"] == "POST":
-        response = lambda_post_handler(event, context)
+        response = post_handler(event, context)
         body = event["body"]
     elif event["httpMethod"] == "GET":
-        response = lambda_get_handler(event, context)
+        response = get_handler(event, context)
+        # aws require content in body be string type
         body = json.dumps(response["Item"], cls=CustomJsonEncoder)
-
+    # reformat for lambda proxy response
     format_response = {
         "isBase64Encoded": False,
         "statusCode": response["HTTPStatusCode"],
@@ -26,6 +27,24 @@ def lambda_handler(event, context):
         "body": body,
     }
     return format_response
+
+
+def post_handler(event, context):
+    """Sent data from API Gateway to the table"""
+    data = json.loads(event["body"])
+    data = convert_empty_values(data)
+    data["ID"] = str(uuid.uuid4())
+
+    response = table.put_item(Item=data)
+    return response["ResponseMetadata"]
+
+
+def get_handler(event, context):
+    # assignment = "java-assignment-solution-100-01"
+    response = table.get_item(Key={"ID": "4dbc7496-669d-4e2b-9572-f2a5b68d914c",})
+    # Add item fetched to the return statement
+    response["ResponseMetadata"]["Item"] = response["Item"]
+    return response["ResponseMetadata"]
 
 
 def convert_empty_values(raw):
@@ -42,16 +61,6 @@ def convert_empty_values(raw):
     return raw
 
 
-def lambda_post_handler(event, context):
-    """Sent data from API Gateway to the table"""
-    data = json.loads(event["body"])
-    data = convert_empty_values(data)
-    data["ID"] = str(uuid.uuid4())
-
-    response = table.put_item(Item=data)
-    return response["ResponseMetadata"]
-
-
 class CustomJsonEncoder(json.JSONEncoder):
     """JSONEncoder for get item"""
 
@@ -60,11 +69,3 @@ class CustomJsonEncoder(json.JSONEncoder):
         if isinstance(obj, Decimal):
             return float(obj)
         return super(CustomJsonEncoder, self).default(obj)
-
-
-def lambda_get_handler(event, context):
-    assignment = "java-assignment-solution-100-01"
-    response = table.get_item(Key={"ID": "4dbc7496-669d-4e2b-9572-f2a5b68d914c",})
-    # Add item fetched to the return statement
-    response["ResponseMetadata"]["Item"] = response["Item"]
-    return response["ResponseMetadata"]
