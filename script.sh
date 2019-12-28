@@ -106,8 +106,8 @@ aws apigateway put-integration \
       --rest-api-id ${rest_api_id} \
       --resource-id ${resource_id} \
       --http-method GET \
-      --type AWS \
-      --integration-http-method GET \
+      --type AWS_PROXY \
+      --integration-http-method POST \
       --uri arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:${account}:function:${function_name}/invocations
 
 
@@ -156,9 +156,3 @@ aws dynamodb create-table \
 aws apigateway test-invoke-method --rest-api-id ${rest_api_id} \
       --resource-id ${resource_id} --http-method POST --path-with-query-string "" \
       --body "{\"item\":\"test\"}" --query "status"
-
-
-
-      apigateway test-invoke-method --rest-api-id l6aq66q0p9 \
-            --resource-id q73e2v --http-method GET --path-with-query-string "" \
-            --body "{\"item\":\"test\"}" --query "status"
