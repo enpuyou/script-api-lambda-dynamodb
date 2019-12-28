@@ -61,7 +61,7 @@ This will
 - Create an DynamoDB table with an automated generated primary key named `assignment`
 
 - Create a `Lambda` function to handle invocation from `APIGateway`,
-store data into the previous `DynamoDB` table, and handle query for assignments.
+  store data into the previous `DynamoDB` table, and handle query for assignments.
 
 - Test invoke the API to get a status code
 
