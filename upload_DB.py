@@ -50,7 +50,7 @@ def get_handler(event, context):
     )
     # response = table.get_item(Key={"ID": "4dbc7496-669d-4e2b-9572-f2a5b68d914c",})
     # Add item fetched to the return statement
-    response["ResponseMetadata"]["Item"] = response["Item"]
+    response["ResponseMetadata"]["Item"] = response["Items"]
     return response["ResponseMetadata"]
 
 
