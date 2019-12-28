@@ -112,11 +112,19 @@ aws apigateway put-integration \
 
 
 # Create API Key
-API_KEY=$(aws apigateway create-api-key \
-      --name ${api_key_name} \
-      --enabled \
+api_key_id=$(aws apigateway create-api-key \
+            --name ${api_key_name} \
+            --enabled \
+            --query "id" \
+            --output=text)
+
+# Get API key value
+API_KEY=$(apigateway get-api-key \
+      --api-key ${api_key_id} \
+      --include-value \
       --query "value" \
       --output=text)
+
 
 # export GATOR_API_KEY and GATOR_ENDPOINT
 export GATOR_API_KEY=$API_KEY
@@ -144,6 +152,20 @@ aws lambda add-permission \
       --statement-id 2 \
       --principal apigateway.amazonaws.com \
       --source-arn "arn:aws:execute-api:us-east-2:${account}:${rest_api_id}/*/GET/${api_path}"
+
+# Create Usage plan
+usage_plan_id=$(aws apigateway create-usage-plan \
+      --name "My Usage Plan" \
+      --description "A new usage plan" \
+      --throttle burstLimit=10,rateLimit=5 \
+      --quota limit=500,offset=0,period=MONTH \
+      --api-stages apiId=0aw1ei1hti${rest_api_id},stage=${stage_name})
+
+# Add the created key to this usage plan
+aws apigateway create-usage-plan-key \
+      --usage-plan-id ${usage_plan_id} \
+      --key-type "API_KEY" \
+      --key-id ${api_key_id}
 
 # Create table
 aws dynamodb create-table \
