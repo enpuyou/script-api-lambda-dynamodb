@@ -51,12 +51,12 @@ source ./script.sh
 
 This will
 
-- Create an `IAM Role` with policies which allow the usage of `Lambda`,
+- Create an `IAM Role` with policies that allow the usage of `Lambda`,
   `DynamoDB`, `APIGateway`, and `CloudWatchLogs`
 
 - Create and deploy an API with two methods: POST and GET
 
-- Create an API Key for the HTTP Request
+- Create an API Key and Usage Plan for the HTTP Request
 
 - Create an DynamoDB table with an automated generated primary key named `ID`
 
