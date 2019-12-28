@@ -5,6 +5,9 @@ import uuid
 import boto3
 # import datetime
 
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('upload-table-sh')
+
 
 def lambda_handler(event, context):
     """Handles incoming request"""
@@ -65,24 +68,12 @@ class CustomJsonEncoder(json.JSONEncoder):
 
 
 def lambda_get_handler(event, context):
-    dynamodb = boto3.resource("dynamodb", region_name='us-east-2', endpoint_url="https://dynamodb.us-east-2.amazonaws.com")
-    table = dynamodb.Table('upload-table-sh')
     assignment = "java-assignment-solution-100-01"
     response = table.get_item(
         Key={
             'ID': "4dbc7496-669d-4e2b-9572-f2a5b68d914c",
-
         }
     )
-    item = response['Item']
-    item = json.dumps(item, cls=CustomJsonEncoder)
-    response_body = response['ResponseMetadata']
-    format_response = {
-        "isBase64Encoded": False,
-        "statusCode": response_body['HTTPStatusCode'],
-        "headers": response_body['HTTPHeaders'],
-        "body": item
-    }
-    print("GetItem succeeded:")
-
-    return format_response
+    # Add item fetched to the return statement
+    response['ResponseMetadata']['Item'] = response['Item']
+    return response['ResponseMetadata']
