@@ -111,11 +111,6 @@ aws apigateway put-integration \
       --uri arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:${account}:function:${function_name}/invocations
 
 
-# Deploy to stage
-aws apigateway create-deployment \
-      --rest-api-id ${rest_api_id} \
-      --stage-name ${stage_name}
-
 # Create API Key
 API_KEY=$(aws apigateway create-api-key \
       --name ${api_key_name} \
@@ -126,6 +121,13 @@ API_KEY=$(aws apigateway create-api-key \
 # export GATOR_API_KEY and GATOR_ENDPOINT
 export GATOR_API_KEY=$API_KEY
 export GATOR_ENDPOINT=https://${rest_api_id}.execute-api.us-east-2.amazonaws.com/${stage_name}/${api_path}
+
+
+# Deploy to stage
+aws apigateway create-deployment \
+      --rest-api-id ${rest_api_id} \
+      --stage-name ${stage_name}
+
 
 # Add permission to lambda function to invoked by POST method
 aws lambda add-permission \
@@ -154,3 +156,9 @@ aws dynamodb create-table \
 aws apigateway test-invoke-method --rest-api-id ${rest_api_id} \
       --resource-id ${resource_id} --http-method POST --path-with-query-string "" \
       --body "{\"item\":\"test\"}" --query "status"
+
+
+
+      apigateway test-invoke-method --rest-api-id l6aq66q0p9 \
+            --resource-id q73e2v --http-method GET --path-with-query-string "" \
+            --body "{\"item\":\"test\"}" --query "status"
