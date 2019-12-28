@@ -75,8 +75,8 @@ trust policy that allows the use of Lambda
 
 `script.md` shows each command and its expected output
 
-
 ## Expected Output
+
 ```
 {
     "FunctionName": "upload-test-sh",
