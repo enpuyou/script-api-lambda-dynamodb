@@ -119,7 +119,7 @@ api_key_id=$(aws apigateway create-api-key \
             --output=text)
 
 # Get API key value
-API_KEY=$(apigateway get-api-key \
+API_KEY=$(aws apigateway get-api-key \
       --api-key ${api_key_id} \
       --include-value \
       --query "value" \
@@ -159,7 +159,9 @@ usage_plan_id=$(aws apigateway create-usage-plan \
       --description "A new usage plan" \
       --throttle burstLimit=10,rateLimit=5 \
       --quota limit=500,offset=0,period=MONTH \
-      --api-stages apiId=0aw1ei1hti${rest_api_id},stage=${stage_name})
+      --api-stages apiId=${rest_api_id},stage=${stage_name} \
+      --query "id" \
+      --output=text)
 
 # Add the created key to this usage plan
 aws apigateway create-usage-plan-key \
@@ -179,4 +181,4 @@ sleep 3s
 # Test Invoke to get status code 200
 aws apigateway test-invoke-method --rest-api-id ${rest_api_id} \
       --resource-id ${resource_id} --http-method POST --path-with-query-string "" \
-      --body "{\"item\":\"test\"}" --query "status"
+      --body "{\"assignment\":\"test\"}" --query "status"
