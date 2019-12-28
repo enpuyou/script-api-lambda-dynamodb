@@ -65,23 +65,24 @@ class CustomJsonEncoder(json.JSONEncoder):
 
 
 def lambda_get_handler(event, context):
-    """GET handler WIP"""
     dynamodb = boto3.resource("dynamodb", region_name='us-east-2', endpoint_url="https://dynamodb.us-east-2.amazonaws.com")
     table = dynamodb.Table('upload-table-sh')
     assignment = "java-assignment-solution-100-01"
+    response = table.get_item(
+        Key={
+            'ID': "4dbc7496-669d-4e2b-9572-f2a5b68d914c",
 
-    try:
-        response = table.get_item(
-            Key={
-                'ID': "fed94b4a-5be3-435b-8034-4b85466fe7c9",
+        }
+    )
+    item = response['Item']
+    item = json.dumps(item, cls=CustomJsonEncoder)
+    response_body = response['ResponseMetadata']
+    format_response = {
+        "isBase64Encoded": False,
+        "statusCode": response_body['HTTPStatusCode'],
+        "headers": response_body['HTTPHeaders'],
+        "body": item
+    }
+    print("GetItem succeeded:")
 
-            }
-        )
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-    else:
-        item = response['Item']
-        print("GetItem succeeded:")
-        result = json.dumps(item, indent=4, cls=CustomJsonEncoder)
-
-    return result
+    return format_response
