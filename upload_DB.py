@@ -13,9 +13,19 @@ table = dynamodb.Table("upload-table-sh")
 def lambda_handler(event, context):
     """Handles incoming request"""
     if event["httpMethod"] == "POST":
-        return lambda_post_handler(event, context)
+        response = lambda_post_handler(event, context)
+        body = event["body"]
     elif event["httpMethod"] == "GET":
-        return lambda_get_handler(event, context)
+        response = lambda_get_handler(event, context)
+        body = json.dumps(response["Item"], cls=CustomJsonEncoder)
+
+    format_response = {
+        "isBase64Encoded": False,
+        "statusCode": response["HTTPStatusCode"],
+        "headers": response["HTTPHeaders"],
+        "body": body,
+    }
+    return format_response
 
 
 def convert_empty_values(raw):
