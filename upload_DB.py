@@ -3,6 +3,7 @@ import json
 from decimal import Decimal
 import uuid
 import boto3
+from boto3.dynamodb.conditions import Key, Attr
 
 # import datetime
 
@@ -41,7 +42,13 @@ def post_handler(event, context):
 
 def get_handler(event, context):
     # assignment = "java-assignment-solution-100-01"
-    response = table.get_item(Key={"ID": "4dbc7496-669d-4e2b-9572-f2a5b68d914c",})
+    for k,v in event["queryStringParameters"].items():
+        key = k
+        value = v
+    response = table.query(
+        KeyConditionExpression=Key(key).eq(value)
+    )
+    # response = table.get_item(Key={"ID": "4dbc7496-669d-4e2b-9572-f2a5b68d914c",})
     # Add item fetched to the return statement
     response["ResponseMetadata"]["Item"] = response["Item"]
     return response["ResponseMetadata"]
