@@ -152,6 +152,8 @@ aws dynamodb create-table \
       --key-schema AttributeName=ID,KeyType=HASH \
       --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 
+sleep 3s
+
 # Test Invoke to get status code 200
 aws apigateway test-invoke-method --rest-api-id ${rest_api_id} \
       --resource-id ${resource_id} --http-method POST --path-with-query-string "" \
