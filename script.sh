@@ -94,11 +94,11 @@ aws apigateway put-integration \
       --integration-http-method POST \
       --uri arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:${account}:function:${function_name}/invocations
 
-# Create GET method
+# Create GET method only allows IAM user to invoke
 aws apigateway put-method --rest-api-id ${rest_api_id} \
        --resource-id ${resource_id} \
        --http-method GET \
-       --authorization-type "NONE" \
+       --authorization-type "AWS_IAM" \
        --api-key-required
 
 # Create Lambda Function Integration to the Lambda function
