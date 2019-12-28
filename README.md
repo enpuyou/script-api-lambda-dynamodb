@@ -58,10 +58,10 @@ This will
 
 - Create an API Key and Usage Plan for the HTTP Request
 
-- Create an DynamoDB table with an automated generated primary key named `ID`
+- Create an DynamoDB table with an automated generated primary key named `assignment`
 
-- Create a `Lambda` function to handle invocation from `APIGateway` and
-  to store data into the previous `DynamoDB` table
+- Create a `Lambda` function to handle invocation from `APIGateway`,
+store data into the previous `DynamoDB` table, and handle query for assignments.
 
 - Test invoke the API to get a status code
 
