@@ -16,7 +16,9 @@ My Security Credentials > Access keys > Create New Access Key
 
 This will generate and download a `csv` file containing the
 `Access Key ID` and `Secret Access Key`, which later will be put
-in the AWS-CLI configure
+in the AWS-CLI configure. Save them into environment variables using
+`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` as these will be used for
+authorizing GET request
 
 ![AWS Secret Credential Page](aws_credential_page.png)
 
@@ -54,7 +56,8 @@ This will
 - Create an `IAM Role` with policies that allow the usage of `Lambda`,
   `DynamoDB`, `APIGateway`, and `CloudWatchLogs`
 
-- Create and deploy an API with two methods: POST and GET
+- Create and deploy an API with two methods: POST(API Key required) and
+  GET(IAM_USER and API Key required)
 
 - Create an API Key and Usage Plan for the HTTP Request
 
@@ -65,10 +68,15 @@ This will
 
 - Test invoke the API to get a status code
 
-The names of IAM role, Lambda function, DynamoDB table, API...can
+
+### Other
+
+The names of IAM role, Lambda function, DynamoDB table, API, and etc. can
 be configured at the top of the `script.sh` file
 
-`upload_DB.py` contains the code that will be in the Lambda function.
+`lambda_get_post_handler.py` contains the code that will be in the Lambda function.
+
+`sign_get_authheader` contains the code that will sign and make a GET request.
 
 `role-trust-policy.json` contains the JSON template of the role
 trust policy that allows the use of Lambda
@@ -78,12 +86,16 @@ trust policy that allows the use of Lambda
 ## Expected Output
 
 ```
+source ./script.sh
+```
+
+```
 {
     "FunctionName": "upload-test-sh",
     "FunctionArn": "arn:aws:lambda:us-east-2:359684827196:function:upload-test-sh",
     "Runtime": "python3.7",
     "Role": "arn:aws:iam::359684827196:role/upload-cli-sh",
-    "Handler": "upload_DB.lambda_handler",
+    "Handler": "lambda_get_post_handler.lambda_handler",
     "CodeSize": 1148,
     "Description": "",
     "Timeout": 3,
@@ -170,4 +182,19 @@ trust policy that allows the use of Lambda
     }
 }
 200
+```
+
+```
+python sign_get_authheader.py
+```
+
+```
+
+BEGIN REQUEST++++++++++++++++++++++++++++++++++++
+Request URL = https://0lc46btkaf.execute-api.us-east-2.amazonaws.com/DEV/cli-test-sh?assignment=test
+
+RESPONSE++++++++++++++++++++++++++++++++++++
+Response code: 200
+
+[{"assignment": "test"}]
 ```
