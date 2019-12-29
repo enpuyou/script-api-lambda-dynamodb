@@ -45,9 +45,7 @@ def get_handler(event, context):
     for k, v in event["queryStringParameters"].items():
         key = k
         value = v
-    response = table.query(
-        KeyConditionExpression=Key(key).eq(value)
-    )
+    response = table.query(KeyConditionExpression=Key(key).eq(value))
     # response = table.get_item(Key={"ID": "4dbc7496-669d-4e2b-9572-f2a5b68d914c",})
     # Add item fetched to the return statement
     response["ResponseMetadata"]["Item"] = response["Items"]
