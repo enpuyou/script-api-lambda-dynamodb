@@ -68,7 +68,6 @@ This will
 
 - Test invoke the API to get a status code
 
-
 ### Other
 
 The names of IAM role, Lambda function, DynamoDB table, API, and etc. can
