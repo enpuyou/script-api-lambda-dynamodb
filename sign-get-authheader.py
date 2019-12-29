@@ -10,24 +10,14 @@ import requests
 method = "GET"
 service = "execute-api"
 region = "us-east-2"
-endpoint = "https://0lc46btkaf.execute-api.us-east-2.amazonaws.com/DEV/cli-test-sh"
+api_key = os.environ.get("GATOR_API_KEY")
+endpoint = os.environ.get("GATOR_ENDPOINT")
+# first part of endpoint
 host = "0lc46btkaf.execute-api.us-east-2.amazonaws.com"
+# second part of endpoint
 canonical_uri = "DEV/cli-test-sh"
+# query
 request_parameters = "assignment=test"
-api_key = "DbQlWPecHD4vLIeIveytUaKLb7Jy8UXE9KAUuYnW"
-
-
-def sign(key, msg):
-    return hmac.new(key, msg.encode("utf-8"), hashlib.sha256).digest()
-
-
-def getSignatureKey(key, dateStamp, regionName, serviceName):
-    kDate = sign(("AWS4" + key).encode("utf-8"), dateStamp)
-    kRegion = sign(kDate, regionName)
-    kService = sign(kRegion, serviceName)
-    kSigning = sign(kService, "aws4_request")
-    return kSigning
-
 
 # Read AWS access key from env. variables or configuration file
 access_key = os.environ.get("AWS_ACCESS_KEY_ID")
@@ -35,6 +25,21 @@ secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
 if access_key is None or secret_key is None:
     print("No access key is available.")
     sys.exit()
+
+
+def sign(key, msg):
+    """Key derivation functions from AWS"""
+    return hmac.new(key, msg.encode("utf-8"), hashlib.sha256).digest()
+
+
+def getSignatureKey(key, dateStamp, regionName, serviceName):
+    """Key derivation functions from AWS"""
+    kDate = sign(("AWS4" + key).encode("utf-8"), dateStamp)
+    kRegion = sign(kDate, regionName)
+    kService = sign(kRegion, serviceName)
+    kSigning = sign(kService, "aws4_request")
+    return kSigning
+
 
 # Create a date for headers and the credential string
 t = datetime.datetime.utcnow()
