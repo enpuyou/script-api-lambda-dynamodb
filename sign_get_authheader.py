@@ -34,11 +34,11 @@ def sign(key, msg):
 
 def getSignatureKey(key, dateStamp, regionName, serviceName):
     """Key derivation functions from AWS"""
-    kDate = sign(("AWS4" + key).encode("utf-8"), dateStamp)
-    kRegion = sign(kDate, regionName)
-    kService = sign(kRegion, serviceName)
-    kSigning = sign(kService, "aws4_request")
-    return kSigning
+    k_date = sign(("AWS4" + key).encode("utf-8"), dateStamp)
+    k_region = sign(k_date, regionName)
+    k_service = sign(k_region, serviceName)
+    k_signing = sign(k_service, "aws4_request")
+    return k_signing
 
 
 # Create a date for headers and the credential string
@@ -48,9 +48,6 @@ datestamp = t.strftime("%Y%m%d")  # Date w/o time, used in credential scope
 
 
 # CREATE A CANONICAL REQUEST
-# Create canonical URI--the part of the URI from domain to query
-canonical_uri = "/DEV/cli-test-sh"
-
 # Create the canonical query string
 canonical_querystring = request_parameters
 
@@ -77,7 +74,7 @@ signed_headers = "host;x-amz-date;x-api-key"
 # requests, the payload is an empty string ("").
 payload_hash = hashlib.sha256(("").encode("utf-8")).hexdigest()
 
-# Step 7: Combine elements to create canonical request
+# Combine elements to create canonical request
 canonical_request = (
     method
     + "\n"
