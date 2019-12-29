@@ -9,9 +9,9 @@ function_name="upload-test-sh"
 # Language for Lambda Function
 runtime="python3.7"
 # Path to lambda function zip file
-lambda_file_path="fileb://upload_DB.py.zip"
+lambda_file_path="fileb://lambda_get_post_handler.py.zip"
 # Lambda function handler (handler module in the file)
-lambda_function_handler="upload_DB.lambda_handler"
+lambda_function_handler="lambda_get_post_handler.lambda_handler"
 # API Gateway Api name
 api_name="api-upload-sh"
 # DynamoDB Table name
