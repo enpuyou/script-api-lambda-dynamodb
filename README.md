@@ -32,7 +32,7 @@ pip install awscli
 
 Type in the following command to fill in four configurations
 
-```
+```bash
 aws configure
 ```
 
@@ -47,8 +47,8 @@ Default output format [json]:
 
 To run script within the existing shell, type in:
 
-```
-source ./script.sh
+```bash
+source ./api-lambda-dynamodb.sh
 ```
 
 This will
@@ -57,7 +57,7 @@ This will
   `DynamoDB`, `APIGateway`, and `CloudWatchLogs`
 
 - Create and deploy an API with two methods: POST(API Key required) and
-  GET(IAM_USER and API Key required)
+  GET(`IAM-USER` and API Key required)
 
 - Create an API Key and Usage Plan for the HTTP Request
 
@@ -68,27 +68,32 @@ This will
 
 - Test invoke the API to get a status code
 
-### Other
+- The names of IAM role, `Lambda` function, `DynamoDB` table, API, and etc. can
+  be configured at the top of the script file
 
-The names of IAM role, Lambda function, DynamoDB table, API, and etc. can
-be configured at the top of the `script.sh` file
+### GET Request
+
+```bash
+pip install requests
+python auth_get_request.py
+```
+
+## Other
 
 `lambda_get_post_handler.py` contains the code that will be in the Lambda function.
 
-`sign_get_authheader` contains the code that will sign and make a GET request.
+`auth_get_request` contains the code that will sign and make a GET request.
 
 `role-trust-policy.json` contains the JSON template of the role
 trust policy that allows the use of Lambda
 
-`script.md` shows each command and its expected output
+`script.md` shows each command with its expected output
 
 ## Expected Output
 
-```
-source ./script.sh
-```
+```bash
+script-api-lambda-dynamodb git:(master) source ./api-lambda-dynamodb.sh
 
-```
 {
     "FunctionName": "upload-test-sh",
     "FunctionArn": "arn:aws:lambda:us-east-2:359684827196:function:upload-test-sh",
@@ -181,19 +186,4 @@ source ./script.sh
     }
 }
 200
-```
-
-```
-python sign_get_authheader.py
-```
-
-```
-
-BEGIN REQUEST++++++++++++++++++++++++++++++++++++
-Request URL = https://0lc46btkaf.execute-api.us-east-2.amazonaws.com/DEV/cli-test-sh?assignment=test
-
-RESPONSE++++++++++++++++++++++++++++++++++++
-Response code: 200
-
-[{"assignment": "test"}]
 ```
