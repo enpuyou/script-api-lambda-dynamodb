@@ -1,7 +1,6 @@
 """Lambda function to handle POST and GET"""
 import json
 from decimal import Decimal
-import uuid
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 
@@ -34,19 +33,17 @@ def post_handler(event, context):
     """Sent data from API Gateway to the table"""
     data = json.loads(event["body"])
     data = convert_empty_values(data)
-    # data["ID"] = str(uuid.uuid4())
-
     response = table.put_item(Item=data)
     return response["ResponseMetadata"]
 
 
 def get_handler(event, context):
-    # assignment = "java-assignment-solution-100-01"
     for k, v in event["queryStringParameters"].items():
+        # assignment key
         key = k
+        # assignment name
         value = v
     response = table.query(KeyConditionExpression=Key(key).eq(value))
-    # response = table.get_item(Key={"ID": "4dbc7496-669d-4e2b-9572-f2a5b68d914c",})
     # Add item fetched to the return statement
     response["ResponseMetadata"]["Item"] = response["Items"]
     return response["ResponseMetadata"]
