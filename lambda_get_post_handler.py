@@ -2,6 +2,7 @@
 import json
 from decimal import Decimal
 import boto3
+import uuid
 from boto3.dynamodb.conditions import Key, Attr
 
 # import datetime
@@ -33,6 +34,7 @@ def post_handler(event, context):
     """Sent data from API Gateway to the table"""
     data = json.loads(event["body"])
     data = convert_empty_values(data)
+    data["uuidID"] = str(uuid.uuid4())
     response = table.put_item(Item=data)
     return response["ResponseMetadata"]
 
