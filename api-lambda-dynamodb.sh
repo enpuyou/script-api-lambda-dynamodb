@@ -172,9 +172,10 @@ aws apigateway create-usage-plan-key \
 # Create table
 aws dynamodb create-table \
       --table-name ${table_name} \
-      --attribute-definitions AttributeName=assignment,AttributeType=S \
-      --key-schema AttributeName=assignment,KeyType=HASH \
+      --attribute-definitions AttributeName=assignment,AttributeType=S AttributeName=uuidID,AttributeType=S \
+      --key-schema AttributeName=assignment,KeyType=HASH AttributeName=uuidID,KeyType=RANGE \
       --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
 
 sleep 5s
 
