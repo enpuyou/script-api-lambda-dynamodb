@@ -107,7 +107,7 @@ shows each command with its expected output.
 ## Expected Output
 
 ```json
-script-api-lambda-dynamodb git:(master) source ./api-lambda-dynamodb.sh
+$ script-api-lambda-dynamodb git:(master) source ./api-lambda-dynamodb.sh
 
 {
     "FunctionName": "upload-test-sh",
