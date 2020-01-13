@@ -12,8 +12,8 @@ A script for automating deployment of `api-lambda-dynamodb` that will
 
 - Create an API Key and Usage Plan for the HTTP Request
 
-- Create an `DynamoDB` table with a primary partition key	named `assignment` (String)
-  and a primary sort key automated generated named `uuidID`(String)
+- Create an `DynamoDB` table with a primary partition key named `assignment`
+  (String) and a primary sort key automated generated named `uuidID`(String)
 
 - Create a `Lambda` function that handles invocation from `APIGateway` to
   store and retrieve/query data from the previous `DynamoDB` table.
@@ -37,7 +37,7 @@ My Security Credentials > Access keys > Create New Access Key
 
 This will generate and download a `csv` file containing the
 `Access Key ID` and `Secret Access Key`, which later will be put
-in the AWS-CLI configure. Save them into environment variables using
+in the `AWS-CLI` configure. Save them as environment variables using
 `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, like this:
 
 ```bash
