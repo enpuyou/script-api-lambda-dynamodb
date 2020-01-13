@@ -35,14 +35,14 @@ My Security Credentials > Access keys > Create New Access Key
 
 ![AWS Secret Credential Page](aws_credential_page.png)
 
-This will generate and download a `csv` file containing the
-`Access Key ID` and `Secret Access Key`, which later will be put
-in the `AWS-CLI` configure. Save them as environment variables using
-`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, like this:
+This will generate and download a `csv` file containing the `Access Key ID`
+and `Secret Access Key`, which later will be put into the `AWS-CLI` configuration.
+Save them as environment variables using `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY`, like this:
 
 ```bash
-export AWS_ACCESS_KEY_ID=<Your-Access-Key-ID>
-export AWS_SECRET_ACCESS_KEY=<Your-Secret-Access-Key>
+export AWS_ACCESS_KEY_ID=<Your Access Key ID>
+export AWS_SECRET_ACCESS_KEY=<Your Secret Access Key>
 ```
 
 These will be used for authorizing GET request.
@@ -92,14 +92,17 @@ python auth_get_request.py
 
 ## Other
 
-`lambda_get_post_handler.py` contains the code that will be in the Lambda function.
+[lambda_get_post_handler.py](https://github.com/enpuyou/script-api-lambda-dynamodb/blob/master/lambda_get_post_handler.py)
+contains the code that will be in the Lambda function.
 
-`auth_get_request` contains the code that will sign and make a GET request.
+[auth_get_request](https://github.com/enpuyou/script-api-lambda-dynamodb/blob/master/auth_get_request.py)
+contains the code that will sign and make a GET request.
 
-`role-trust-policy.json` contains the JSON template of the role
-trust policy that allows the use of Lambda
+[role-trust-policy.json](https://github.com/enpuyou/script-api-lambda-dynamodb/blob/master/role-trust-policy.json)
+contains the JSON template of the role trust policy that allows the use of Lambda.
 
-`script.md` shows each command with its expected output
+[script.md](https://github.com/enpuyou/script-api-lambda-dynamodb/blob/master/script.md)
+shows each command with its expected output.
 
 ## Expected Output
 
