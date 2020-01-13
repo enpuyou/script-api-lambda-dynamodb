@@ -4,7 +4,7 @@
 
 A script for automating deployment of `api-lambda-dynamodb` that will
 
-- Create an `IAM Role` with policies that allow the usage of `Lambda`,
+- Create an `IAM Role` with policies that allows the usage of `Lambda`,
   `DynamoDB`, `APIGateway`, and `CloudWatchLogs`
 
 - Create and deploy an API with two methods: POST(API Key required) and
@@ -12,10 +12,11 @@ A script for automating deployment of `api-lambda-dynamodb` that will
 
 - Create an API Key and Usage Plan for the HTTP Request
 
-- Create an DynamoDB table with an automated generated primary key named `assignment`
+- Create an `DynamoDB` table with a primary partition key	named `assignment` (String)
+  and a primary sort key automated generated named `uuidID`(String)
 
-- Create a `Lambda` function to handle invocation from `APIGateway`,
-  store data into the previous `DynamoDB` table, and handle query for assignments.
+- Create a `Lambda` function that handles invocation from `APIGateway` to
+  store and retrieve/query data from the previous `DynamoDB` table.
 
 - Test invoke the API to get a status code
 
