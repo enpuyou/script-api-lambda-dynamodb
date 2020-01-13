@@ -58,10 +58,8 @@ pip install awscli
 Type in the following command to fill in four configurations
 
 ```bash
-aws configure
-```
+$ aws configure
 
-```
 AWS Access Key ID [********************]:
 AWS Secret Access Key [*******************]:
 Default region name [us-east-2]:
