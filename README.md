@@ -2,7 +2,25 @@
 
 [![Build Status](https://travis-ci.com/enpuyou/script-api-lambda-dynamodb.svg?branch=master)](https://travis-ci.com/enpuyou/script-api-lambda-dynamodb)
 
-A script for automating deployment of api-lambda-dynamodb
+A script for automating deployment of `api-lambda-dynamodb` that will
+
+- Create an `IAM Role` with policies that allow the usage of `Lambda`,
+  `DynamoDB`, `APIGateway`, and `CloudWatchLogs`
+
+- Create and deploy an API with two methods: POST(API Key required) and
+  GET(`IAM-USER` and API Key required)
+
+- Create an API Key and Usage Plan for the HTTP Request
+
+- Create an DynamoDB table with an automated generated primary key named `assignment`
+
+- Create a `Lambda` function to handle invocation from `APIGateway`,
+  store data into the previous `DynamoDB` table, and handle query for assignments.
+
+- Test invoke the API to get a status code
+
+- Provide configurable names of IAM role, `Lambda` function, `DynamoDB` table,
+  API, and etc. at the top of the script file
 
 ## Instruction
 
@@ -14,13 +32,19 @@ After successfully making the account, go to
 My Security Credentials > Access keys > Create New Access Key
 ```
 
+![AWS Secret Credential Page](aws_credential_page.png)
+
 This will generate and download a `csv` file containing the
 `Access Key ID` and `Secret Access Key`, which later will be put
 in the AWS-CLI configure. Save them into environment variables using
-`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` as these will be used for
-authorizing GET request
+`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, like this:
 
-![AWS Secret Credential Page](aws_credential_page.png)
+```bash
+export AWS_ACCESS_KEY_ID=<Your-Access-Key-ID>
+export AWS_SECRET_ACCESS_KEY=<Your-Secret-Access-Key>
+```
+
+These will be used for authorizing GET request.
 
 ### Install AWS-CLI
 
@@ -51,30 +75,17 @@ To run script within the existing shell, type in:
 source ./api-lambda-dynamodb.sh
 ```
 
-This will
-
-- Create an `IAM Role` with policies that allow the usage of `Lambda`,
-  `DynamoDB`, `APIGateway`, and `CloudWatchLogs`
-
-- Create and deploy an API with two methods: POST(API Key required) and
-  GET(`IAM-USER` and API Key required)
-
-- Create an API Key and Usage Plan for the HTTP Request
-
-- Create an DynamoDB table with an automated generated primary key named `assignment`
-
-- Create a `Lambda` function to handle invocation from `APIGateway`,
-  store data into the previous `DynamoDB` table, and handle query for assignments.
-
-- Test invoke the API to get a status code
-
-- The names of IAM role, `Lambda` function, `DynamoDB` table, API, and etc. can
-  be configured at the top of the script file
-
 ### GET Request
+
+Install `requests` library using pip:
 
 ```bash
 pip install requests
+```
+
+To run the program and send a GET request:
+
+```bash
 python auth_get_request.py
 ```
 
