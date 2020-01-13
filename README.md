@@ -70,7 +70,7 @@ Default output format [json]:
 
 ### Run Script
 
-To run script within the existing shell, type in:
+To run script within the current shell, type in:
 
 ```bash
 source ./api-lambda-dynamodb.sh
