@@ -42,7 +42,7 @@ def get_request(assignment):
     datestamp = t.strftime("%Y%m%d")  # Date w/o time, used in credential scope
 
     host, stage, method = ENDPOINT.replace('https://', '').split('/')
-    canonical_uri = stage + '/' + method
+    canonical_uri = "/" + stage + '/' + method
 
     # query
     request_parameters = f"assignment={assignment}"
@@ -86,7 +86,7 @@ def get_request(assignment):
         + "\n"
         + payload_hash
     )
-
+    print("my canonical: " + canonical_request)
     # CREATE THE STRING TO SIGN
     # Match the algorithm to the hashing algorithm you use, either SHA-1 or
     # SHA-256 (recommended)
@@ -102,6 +102,7 @@ def get_request(assignment):
         + "\n"
         + hashlib.sha256(canonical_request.encode("utf-8")).hexdigest()
     )
+    print("my s2s: " + string_to_sign)
 
     # CALCULATE THE SIGNATURE
     # Create the signing key using the function defined above.
