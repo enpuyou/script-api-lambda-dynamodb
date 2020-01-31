@@ -183,3 +183,7 @@ sleep 5s
 aws apigateway test-invoke-method --rest-api-id ${rest_api_id} \
       --resource-id ${resource_id} --http-method POST --path-with-query-string "" \
       --body "{\"assignment\":\"test\"}" --query "status"
+
+
+echo "GATOR_API_KEY=${GATOR_API_KEY}"
+echo "GATOR_ENDPOINT=${GATOR_ENDPOINT}"
