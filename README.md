@@ -25,6 +25,14 @@ A script for automating deployment of `api-lambda-dynamodb` that will
 
 ## Instruction
 
+### Install
+
+This program uses Pipenv for installation. You can easily create a `virtualenv` for this project and run the scripts.
+
+```bash
+pipenv install --dev
+```
+
 ### Make AWS account
 
 After successfully making the account, go to
@@ -47,18 +55,12 @@ export AWS_SECRET_ACCESS_KEY=<Your Secret Access Key>
 
 These will be used for authorizing GET request.
 
-### Install AWS-CLI
-
-```
-pip install awscli
-```
-
 ### Configure AWS-CLI
 
 Type in the following command to fill in four configurations
 
 ```bash
-$ aws configure
+$ pipenv run aws configure
 
 AWS Access Key ID [********************]:
 AWS Secret Access Key [*******************]:
@@ -76,16 +78,11 @@ source ./api-lambda-dynamodb.sh
 
 ### GET Request
 
-Install `requests` library using pip:
-
-```bash
-pip install requests
-```
 
 To run the program and send a GET request:
 
 ```bash
-python auth_get_request.py
+pipenv run python auth_get_request.py
 ```
 
 ## Other
