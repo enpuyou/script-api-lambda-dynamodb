@@ -27,7 +27,8 @@ A script for automating deployment of `api-lambda-dynamodb` that will
 
 ### Install
 
-This program uses Pipenv for installation. You can easily create a `virtualenv` for this project and run the scripts.
+This program uses Pipenv for installation. You can easily create a `virtualenv`
+for this project and run the scripts.
 
 ```bash
 pipenv install --dev
@@ -77,7 +78,6 @@ source ./api-lambda-dynamodb.sh
 ```
 
 ### GET Request
-
 
 To run the program and send a GET request:
 
