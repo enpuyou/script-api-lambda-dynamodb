@@ -22,28 +22,29 @@ api_path="cli-test-sh"
 api_key_name="upload-API-key"
 # Name for the deployment stage name
 stage_name="DEV"
+# Default run command
+run="pipenv run "
 # Get Amazon account information
-account=$(aws sts get-caller-identity --query "Account" --output=text)
-
+account=$(${run}aws sts get-caller-identity --query "Account" --output=text)
 
 # Create Role
-role_arn=$(aws iam create-role \
+role_arn=$(${run}aws iam create-role \
         --role-name ${role_name} \
         --assume-role-policy-document file://role-trust-policy.json \
         --query "Role.Arn" \
     --output=text)
 
 # Add policies to the role created
-aws iam attach-role-policy \
+${run}aws iam attach-role-policy \
     --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess \
     --role-name ${role_name}
-aws iam attach-role-policy \
+${run}aws iam attach-role-policy \
     --policy-arn arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs \
     --role-name ${role_name}
-aws iam attach-role-policy \
+${run}aws iam attach-role-policy \
     --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole \
     --role-name ${role_name}
-aws iam attach-role-policy \
+${run}aws iam attach-role-policy \
     --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole \
     --role-name ${role_name}
 
@@ -51,7 +52,7 @@ aws iam attach-role-policy \
 sleep 10s
 
 # Create Lambda Function
-aws lambda create-function \
+${run}aws lambda create-function \
     --function-name ${function_name} \
     --zip-file ${lambda_file_path} \
     --handler ${lambda_function_handler} \
@@ -59,19 +60,19 @@ aws lambda create-function \
     --role ${role_arn}
 
 # Create a Rest API
-rest_api_id=$(aws apigateway create-rest-api \
+rest_api_id=$(${run}aws apigateway create-rest-api \
         --name ${api_name} \
         --query "id" \
     --output=text)
 
 # Get the parent id of the Rest API created
-parent_id=$(aws apigateway get-resources \
+parent_id=$(${run}aws apigateway get-resources \
         --rest-api-id ${rest_api_id} \
         --query "items[0].id" \
     --output=text)
 
 # Create a resource under the current API
-resource_id=$(aws apigateway create-resource \
+resource_id=$(${run}aws apigateway create-resource \
         --rest-api-id ${rest_api_id} \
         --parent-id ${parent_id} \
         --path-part ${api_path} \
@@ -79,14 +80,14 @@ resource_id=$(aws apigateway create-resource \
     --output=text)
 
 # Create POST method
-aws apigateway put-method --rest-api-id ${rest_api_id} \
+${run}aws apigateway put-method --rest-api-id ${rest_api_id} \
     --resource-id ${resource_id} \
     --http-method POST \
     --authorization-type "NONE" \
     --api-key-required
 
 # Create Lambda Proxy Integration to the Lambda function
-aws apigateway put-integration \
+${run}aws apigateway put-integration \
     --rest-api-id ${rest_api_id} \
     --resource-id ${resource_id} \
     --http-method POST \
@@ -95,14 +96,14 @@ aws apigateway put-integration \
     --uri arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:${account}:function:${function_name}/invocations
 
 # Create GET method only allows IAM user to invoke
-aws apigateway put-method --rest-api-id ${rest_api_id} \
+${run}aws apigateway put-method --rest-api-id ${rest_api_id} \
     --resource-id ${resource_id} \
     --http-method GET \
     --authorization-type "AWS_IAM" \
     --api-key-required
 
 # Create Lambda Function Integration to the Lambda function
-aws apigateway put-integration \
+${run}aws apigateway put-integration \
     --rest-api-id ${rest_api_id} \
     --resource-id ${resource_id} \
     --http-method GET \
@@ -112,14 +113,14 @@ aws apigateway put-integration \
 
 
 # Create API Key
-api_key_id=$(aws apigateway create-api-key \
+api_key_id=$(${run}aws apigateway create-api-key \
         --name ${api_key_name} \
         --enabled \
         --query "id" \
     --output=text)
 
 # Get API key value
-API_KEY=$(aws apigateway get-api-key \
+API_KEY=$(${run}aws apigateway get-api-key \
         --api-key ${api_key_id} \
         --include-value \
         --query "value" \
@@ -132,13 +133,13 @@ export GATOR_ENDPOINT=https://${rest_api_id}.execute-api.us-east-2.amazonaws.com
 
 
 # Deploy to stage
-aws apigateway create-deployment \
+${run}aws apigateway create-deployment \
     --rest-api-id ${rest_api_id} \
     --stage-name ${stage_name}
 
 
 # Add permission to lambda function to invoked by POST method
-aws lambda add-permission \
+${run}aws lambda add-permission \
     --function-name ${function_name} \
     --action "lambda:InvokeFunction" \
     --statement-id 1 \
@@ -146,7 +147,7 @@ aws lambda add-permission \
     --source-arn "arn:aws:execute-api:us-east-2:${account}:${rest_api_id}/*/POST/${api_path}"
 
 # Add permission to lambda function to invoked by GET method
-aws lambda add-permission \
+${run}aws lambda add-permission \
     --function-name ${function_name} \
     --action "lambda:InvokeFunction" \
     --statement-id 2 \
@@ -154,7 +155,7 @@ aws lambda add-permission \
     --source-arn "arn:aws:execute-api:us-east-2:${account}:${rest_api_id}/*/GET/${api_path}"
 
 # Create Usage plan
-usage_plan_id=$(aws apigateway create-usage-plan \
+usage_plan_id=$(${run}aws apigateway create-usage-plan \
         --name "My Usage Plan" \
         --description "A new usage plan" \
         --throttle burstLimit=10,rateLimit=5 \
@@ -164,13 +165,13 @@ usage_plan_id=$(aws apigateway create-usage-plan \
     --output=text)
 
 # Add the created key to this usage plan
-aws apigateway create-usage-plan-key \
+${run}aws apigateway create-usage-plan-key \
     --usage-plan-id ${usage_plan_id} \
     --key-type "API_KEY" \
     --key-id ${api_key_id}
 
 # Create table
-aws dynamodb create-table \
+${run}aws dynamodb create-table \
     --table-name ${table_name} \
     --attribute-definitions AttributeName=assignment,AttributeType=S AttributeName=uuidID,AttributeType=S \
     --key-schema AttributeName=assignment,KeyType=HASH AttributeName=uuidID,KeyType=RANGE \
@@ -180,7 +181,7 @@ aws dynamodb create-table \
 sleep 5s
 
 # Test Invoke to get status code 200
-aws apigateway test-invoke-method --rest-api-id ${rest_api_id} \
+${run}aws apigateway test-invoke-method --rest-api-id ${rest_api_id} \
     --resource-id ${resource_id} --http-method POST --path-with-query-string "" \
     --body "{\"assignment\":\"test\"}" --query "status"
 
