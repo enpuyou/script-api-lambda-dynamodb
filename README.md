@@ -71,6 +71,12 @@ Default output format [json]:
 
 ### Run Script
 
+To give execute permission to the script:
+
+```bash
+chmod +x ./api-lambda-dynamodb.sh
+```
+
 To run script within the current shell, type in:
 
 ```bash
