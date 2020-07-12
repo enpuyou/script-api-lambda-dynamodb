@@ -41,7 +41,7 @@ def post_handler(event, context):
 
 def get_handler(event, context):
     queries = event["queryStringParameters"]
-    if queries["passBuild"] == "True":
+    if queries["passBuild"] != "true":
         response = table.query(
             KeyConditionExpression=Key("assignment").eq(queries["assignment"]))
     else:
