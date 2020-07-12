@@ -40,16 +40,22 @@ def post_handler(event, context):
 
 
 def get_handler(event, context):
+    key = []
+    value = []
+    # Items: [assignment, passBuild]
     for k, v in event["queryStringParameters"].items():
-        # assignment key
-        key = k
-        # assignment name
-        value = v
-    response = table.query(
-        KeyConditionExpression=Key(key).eq(value),
-        FilterExpression=Attr('report').contains(
-            '"numberOfFailures" : { "N" : "0" }')
-    )
+        # parameter key
+        key.append(k)
+        # parameter name
+        value.append(v)
+    if value[1] is not True:
+        response = table.query(KeyConditionExpression=Key(key[0]).eq(value[0]))
+    else:
+        response = table.query(
+            KeyConditionExpression=Key(key).eq(value),
+            FilterExpression=Attr('report').contains(
+                '"numberOfFailures" : { "N" : "0" }')
+        )
     # Add item fetched to the return statement
     response["ResponseMetadata"]["Item"] = response["Items"]
     return response["ResponseMetadata"]
