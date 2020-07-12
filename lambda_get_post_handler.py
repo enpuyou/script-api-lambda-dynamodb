@@ -45,7 +45,11 @@ def get_handler(event, context):
         key = k
         # assignment name
         value = v
-    response = table.query(KeyConditionExpression=Key(key).eq(value))
+    response = table.query(
+        KeyConditionExpression=Key(key).eq(value),
+        FilterExpression=Attr('report').contains(
+            '"numberOfFailures" : { "N" : "0" }')
+    )
     # Add item fetched to the return statement
     response["ResponseMetadata"]["Item"] = response["Items"]
     return response["ResponseMetadata"]
